@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Мій вішліст</title>
+<meta name="description" content="Вішліст: обирай подарунок і бронюй, щоб інші бачили, що його вже дарують.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+<style>
+:root{--bg:#fff7f8;--card:#fff;--ink:#2b2226;--mute:#8a7a80;--acc:#d9648a;--line:#f0dde2;--ok:#e9e3e5;--navbg:rgba(255,247,248,.92)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1619;--card:#271f23;--ink:#f6eef1;--mute:#a8969d;--acc:#ec7fa3;--line:#3a2e33;--ok:#332a2e;--navbg:rgba(28,22,25,.92)}}
+:root[data-theme="dark"]{--bg:#1c1619;--card:#271f23;--ink:#f6eef1;--mute:#a8969d;--acc:#ec7fa3;--line:#3a2e33;--ok:#332a2e;--navbg:rgba(28,22,25,.92)}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.4;padding-bottom:env(safe-area-inset-bottom,0px)}
+main{max-width:960px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:28px;margin:8px 0 4px}
+.sub{color:var(--mute);margin:0 0 8px}
+.note{font-size:13px;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:12px 0 0}
+.note[hidden]{display:none}
+h2{font-size:20px;margin:32px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.cnote{margin:0 0 14px;color:var(--mute)}
+.empty{color:var(--mute);font-size:14px;margin:0}
+
+/* Навігація */
+nav{position:sticky;top:0;z-index:20;background:var(--navbg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.navin{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:10px 16px}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;-webkit-mask-image:linear-gradient(90deg,#000 90%,transparent);mask-image:linear-gradient(90deg,#000 90%,transparent);padding-right:16px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;white-space:nowrap;font-size:14px;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none}
+.tab.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.tab .cnt{opacity:.6;margin-left:4px;font-size:12px}
+.icon{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;padding:0}
+.icon.acc{background:var(--acc);border-color:var(--acc);color:#fff;font-size:22px;line-height:1}
+.adminbar{max-width:960px;margin:0 auto;padding:0 16px 10px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mute)}
+.adminbar[hidden]{display:none}
+.adminbar .sp{flex:1}
+.adminbar button{flex:none;width:auto;padding:6px 12px;font-size:13px}
+
+/* Картки */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.card.res{opacity:.65}
+.ph{aspect-ratio:1/1;background:var(--ok);display:flex;align-items:center;justify-content:center;font-size:56px;text-decoration:none;position:relative}
+.ph img{width:100%;height:100%;object-fit:cover}
+.badge{position:absolute;top:8px;left:8px;background:var(--ink);color:var(--bg);font-size:12px;padding:3px 10px;border-radius:99px}
+.tools{position:absolute;top:8px;right:8px;display:flex;gap:6px;z-index:2}
+.tools button{flex:none;width:32px;height:32px;padding:0;border-radius:50%;background:var(--card);border:1px solid var(--line);color:var(--ink);font-size:14px}
+.body{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.name{font-weight:600}
+.meta{font-size:13px;color:var(--mute)}
+.price{font-weight:600;color:var(--acc)}
+.btns{display:flex;gap:8px;margin-top:auto;padding-top:6px}
+a.btn,button{flex:1;text-align:center;font:inherit;font-size:14px;padding:9px 8px;border-radius:10px;border:1px solid var(--acc);background:transparent;color:var(--acc);text-decoration:none;cursor:pointer}
+button.main{background:var(--acc);color:#fff}
+button:disabled{opacity:.5;cursor:default}
+button.ghost{border-color:var(--line);color:var(--mute)}
+
+/* Діалоги */
+.dlg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.dlg[hidden]{display:none}
+.dbox{background:var(--card);color:var(--ink);border-radius:20px;padding:22px;max-width:520px;width:100%;max-height:88vh;overflow:auto}
+.dbox h3{margin:0 0 8px;font-size:20px}.intro{margin:0 0 16px;color:var(--mute);font-size:14px}
+.bk{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:14px;margin:0 0 10px;background:var(--bg)}
+.bn{flex:none;width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600}
+.bi{flex:1;min-width:0}.bt{font-weight:600}.ba{font-size:13px;color:var(--mute)}.bp{font-size:14px;font-weight:600;color:var(--acc);margin-top:2px}
+.bk .btn{flex:none;width:auto;padding:8px 12px}
+form label{display:block;font-size:13px;color:var(--mute);margin:0 0 12px}
+form input,form select,form textarea{display:block;width:100%;margin-top:4px;font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+form textarea{resize:vertical;min-height:60px}
+form input:focus,form select:focus,form textarea:focus{outline:2px solid var(--acc);outline-offset:-1px;border-color:transparent}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.prev{display:flex;align-items:center;gap:12px;margin:-4px 0 12px}
+.prev img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+.prev[hidden]{display:none}
+.err{color:#c0392b;font-size:13px;margin:0 0 10px;min-height:1em}
+.factions{display:flex;gap:8px;margin-top:6px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;z-index:60;max-width:calc(100% - 32px)}
+.toast[hidden]{display:none}
+
+@media (max-width:640px){
+ main{padding:16px 10px 40px}h1{font-size:24px}h2{margin:24px 0 10px}
+ .navin{padding:8px 10px}.adminbar{padding:0 10px 8px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .ph{font-size:40px}.body{padding:8px;gap:4px}.name{font-size:14px}.meta{font-size:12px}.price{font-size:14px}
+ .btns{flex-direction:column;gap:6px}a.btn,button{font-size:13px;padding:8px 6px}.badge{font-size:11px;padding:2px 8px}
+ .bk{flex-wrap:wrap}.bk .bi{flex-basis:calc(100% - 44px)}.bk .btn{width:100%}
+ .row{flex-direction:column;gap:0}
+}
+</style>
+</head>
+<body>
+<nav>
+ <div class="navin">
+  <div class="tabs" id="tabs"></div>
+  <button class="icon acc" id="addBtn" hidden title="Додати товар" aria-label="Додати товар">+</button>
+  <button class="icon" id="loginBtn" title="Вхід для адміністратора" aria-label="Вхід для адміністратора">🔑</button>
+ </div>
+ <div class="adminbar" id="adminbar" hidden>
+  <span>Режим адміністратора</span><span class="sp"></span>
+  <button class="ghost" id="logoutBtn">Вийти</button>
+ </div>
+</nav>
+<main>
+ <h1>Мій вішліст 💝</h1>
+ <p class="sub">Натискай на фото, щоб відкрити, де замовити. А «Забронювати» — щоб інші бачили, що це вже подарують.</p>
+ <div class="note" id="note" hidden></div>
+ <div id="app"></div>
+</main>
+
+<!-- Список книжок -->
+<div class="dlg" id="booksDlg" hidden>
+ <div class="dbox" role="dialog" aria-modal="true" aria-labelledby="booksT">
+  <h3 id="booksT">Список книжок ✨</h3>
+  <p class="intro">В мене взагалі дуже багато непрочитаних книжок, то стараюсь не купувати нові, поки не дочитаю. Але тут є декілька книжок, які я б хотіла прочитати ✨</p>
+  <div id="dlist"></div>
+  <button class="main" data-close style="width:100%;margin-top:14px">Закрити</button>
+ </div>
+</div>
+
+<!-- Вхід -->
+<div class="dlg" id="loginDlg" hidden>
+ <form class="dbox" id="loginForm" role="dialog" aria-modal="true" aria-labelledby="loginT">
+  <h3 id="loginT">Вхід для адміністратора</h3>
+  <p class="intro">Адміністратор може додавати, змінювати й видаляти товари.</p>
+  <label>Пошта<input type="email" name="email" autocomplete="username" required></label>
+  <label>Пароль<input type="password" name="password" autocomplete="current-password" required></label>
+  <p class="err" id="loginErr"></p>
+  <div class="factions"><button type="button" class="ghost" data-close>Скасувати</button><button type="submit" class="main">Увійти</button></div>
+ </form>
+</div>
+
+<!-- Додавання / редагування товару -->
+<div class="dlg" id="itemDlg" hidden>
+ <form class="dbox" id="itemForm" role="dialog" aria-modal="true" aria-labelledby="itemT">
+  <h3 id="itemT">Новий товар</h3>
+  <label>Назва *<input name="n" required maxlength="120" placeholder="Напр. Светрик"></label>
+  <label>Розділ *<select name="cat" id="catSel" required></select></label>
+  <label>Опис<input name="m" maxlength="200" placeholder="Напр. розмір S, бежевий"></label>
+  <div class="row">
+   <label>Ціна<input name="p" maxlength="40" placeholder="1 500 ₴"></label>
+   <label>Емодзі (якщо без фото)<input name="e" maxlength="8" placeholder="🎁"></label>
+  </div>
+  <label>Посилання, де замовити<input name="u" type="url" placeholder="https://..."></label>
+  <label>Фото — посилання на картинку<input name="imgUrl" type="url" placeholder="https://.../photo.jpg"></label>
+  <label>…або завантаж файл<input name="imgFile" type="file" accept="image/*"></label>
+  <div class="prev" id="imgPrev" hidden><img alt=""><button type="button" class="ghost" id="imgClear" style="flex:none;width:auto">Прибрати фото</button></div>
+  <p class="err" id="itemErr"></p>
+  <div class="factions"><button type="button" class="ghost" data-close>Скасувати</button><button type="submit" class="main" id="itemSave">Зберегти</button></div>
+ </form>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
