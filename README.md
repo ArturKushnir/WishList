@@ -17,17 +17,16 @@
 | `firebase-config.js` | налаштування бази (поки `null` → демо-режим) |
 | `firestore.rules` | правила доступу до бази |
 
-## Підключення бази (одноразово, ~5 хв)
+## База
 
-GitHub Pages віддає лише статичні файли, тому спільні дані (бронювання й нові товари) зберігаються в безкоштовній базі **Firebase Firestore**. Без неї сайт працює в демо-режимі: все видно лише в тому браузері, де це зроблено.
+Спільні дані (бронювання й товари, додані адміном) зберігаються в безкоштовній базі **Firebase Firestore**, проєкт `sasha-wishlist-44ii` (<https://console.firebase.google.com/project/sasha-wishlist-44ii/firestore>). Налаштування підключення лежать у `firebase-config.js`.
 
-1. Відкрий <https://console.firebase.google.com> → **Create a project** (Google Analytics можна вимкнути).
-2. Зліва **Build → Firestore Database → Create database** → обери регіон (напр. `eur3`) → **Start in production mode**.
-3. Вкладка **Rules** → встав вміст файлу `firestore.rules` → **Publish**.
-4. ⚙️ **Project settings → General → Your apps → `</>` (Web)** → дай будь-яку назву → **Register app**. Скопіюй об’єкт `firebaseConfig`.
-5. Встав його у `firebase-config.js` замість `null` і запуш зміни.
+- колекція `items`: товари, додані або змінені адміном (вбудовані товари лежать у `data.js`);
+- колекція `reservations`: бронювання.
 
-Фото, які адмін завантажує з телефона/комп’ютера, стискаються в браузері (~50–150 КБ) і зберігаються прямо в базі, тож платний Firebase Storage не потрібен.
+Оновити правила доступу: `firebase deploy --only firestore`.
+
+Фото, які адмін завантажує з телефона чи комп’ютера, стискаються в браузері (~50–150 КБ) і зберігаються прямо в базі, тож платний Firebase Storage не потрібен.
 
 ## Безпека
 
