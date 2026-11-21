@@ -31,7 +31,8 @@ nav{position:sticky;top:0;z-index:20;background:var(--navbg);-webkit-backdrop-fi
 .tab.on{background:var(--acc);border-color:var(--acc);color:#fff}
 .tab .cnt{opacity:.6;margin-left:4px;font-size:12px}
 .icon{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;padding:0}
-.icon.acc{background:var(--acc);border-color:var(--acc);color:#fff;font-size:22px;line-height:1}
+.icon.acc{background:var(--acc);border-color:var(--acc);color:#fff}
+.icon svg{display:block}
 .icon[hidden]{display:none}
 .out{flex:none;width:auto;height:36px;padding:0 14px;border-radius:99px;font-size:14px;white-space:nowrap}
 .out[hidden]{display:none}
@@ -93,7 +94,7 @@ form input:focus,form select:focus,form textarea:focus{outline:2px solid var(--a
 <nav>
  <div class="navin">
   <div class="tabs" id="tabs"></div>
-  <button class="icon acc" id="addBtn" hidden title="Додати товар" aria-label="Додати товар">+</button>
+  <button class="icon acc" id="addBtn" hidden title="Додати товар" aria-label="Додати товар"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
   <button class="ghost out" id="logoutBtn" hidden>Вийти</button>
   <button class="icon" id="loginBtn" title="Вхід для адміністратора" aria-label="Вхід для адміністратора">🔑</button>
  </div>
