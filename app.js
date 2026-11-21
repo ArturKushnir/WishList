@@ -251,6 +251,7 @@ function setPreview(src) {
 }
 
 function openItemForm(id) {
+  if (!isAdmin) return;
   editId = id;
   form.reset(); $("#itemErr").textContent = "";
   const it = id ? allItems().find((i) => i.id === id) : null;
