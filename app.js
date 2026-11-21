@@ -183,7 +183,7 @@ addEventListener("resize", fitScrollPadding);
 function updateAdminUI() {
   $("#addBtn").hidden = !isAdmin;
   $("#loginBtn").hidden = isAdmin;
-  $("#adminbar").hidden = !isAdmin;
+  $("#logoutBtn").hidden = !isAdmin;
   fitScrollPadding();
 }
 
